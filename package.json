@@ -1,0 +1,44 @@
+{
+  "name": "twilio-flex-spoke-directory-plugin",
+  "version": "0.1.0",
+  "description": "Spoke Directory plugin for Twilio Flex",
+  "scripts": {
+    "plugin:start": "twilio flex:plugins:start -l debug",
+    "plugin:build": "rm -rf build && twilio flex:plugins:build -l=debug",
+    "plugin:deploy": "npm run plugin:build && UNBUNDLED_REACT=true twilio flex:plugins:deploy --changelog=\"$CHANGELOG\" --version=$npm_package_version -l=debug",
+    "plugin:release": "twilio flex:plugins:release --plugin twilio-flex-spoke-directory-plugin@latest",
+    "functions:start": "twilio serverless:start --functions-folder=dist --env=./functions/.env",
+    "functions:build": "rm -rf dist && webpack --config webpack.functions.config.js",
+    "functions:deploy": "npm run functions:build && twilio serverless:deploy --override-existing-project --functions-folder=dist --runtime=node12 --log-level=debug --no-assets --env=./functions/.env",
+    "start": "concurrently npm:functions:start npm:plugin:start",
+    "version": "echo $npm_package_version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spoke-ph/twilio-flex-spoke-directory-plugin.git"
+  },
+  "keywords": [
+    "spoke",
+    "phone",
+    "directory",
+    "twilio",
+    "flex",
+    "plugin"
+  ],
+  "bugs": {
+    "url": "https://github.com/spoke-ph/twilio-flex-spoke-directory-plugin/issues"
+  },
+  "homepage": "https://github.com/spoke-ph/twilio-flex-spoke-directory-plugin#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@spoke-ph/directory-flex-functions": "0.1.1",
+    "@spoke-ph/directory-flex-plugin": "0.1.1",
+    "@twilio/flex-ui": "^1",
+    "concurrently": "6.3.0",
+    "flex-plugin-scripts": "4.2.0",
+    "keep-a-changelog": "0.10.4",
+    "typescript": "4.4.4",
+    "webpack": "5.60.0",
+    "webpack-cli": "4.9.1"
+  }
+}

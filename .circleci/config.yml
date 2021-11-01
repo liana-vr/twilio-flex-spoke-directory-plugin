@@ -1,0 +1,89 @@
+version: 2.1
+
+defaults: &defaults
+  working_directory: ~/twilio-flex-spoke-directory-plugin
+  docker:
+    # Twilio's serverless runtime environment runs on node 12, so we keep it consistent here
+    - image: circleci/node:12
+
+aliases:
+  - &npmrc # TODO remove once we have public versions of the plugin and functions packages
+    name: Link npmrc
+    command: |
+      echo "@spoke-ph:registry=https://registry.npmjs.org/" \>> ~/.npmrc
+      echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" \>> ~/.npmrc
+  - &filter_untagged_commits_on_master_branch
+    filters:
+      branches:
+        only: master
+      tags:
+        only: /^$/ # don't run on tagged commit
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *npmrc
+      - run: 
+          name: NPM Install
+          command: npm ci
+      - run:
+          name: Install twilio cli and plugins
+          command: |
+            npm i --prefix=$HOME/.local -g twilio-cli
+            twilio plugins:install @twilio-labs/plugin-serverless
+            twilio plugins:install @twilio-labs/plugin-flex
+      - run:
+          name: Build serverless functions
+          command: npm run functions:build
+      - run:
+          name: Build Flex plugin
+          command: npm run plugin:build
+
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: 
+          name: NPM Install
+          command: npm ci
+      # Add step to echo to .env here
+      # Add step to deploy here
+      
+  tag:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Tag version
+          command: |
+            VERSION=`npm --loglevel silent run version`
+            echo $VERSION
+            if [[ ("${CIRCLE_BRANCH}" == "master") && ($VERSION != *"SNAPSHOT") ]]; then
+              npm --loglevel silent run version | xargs -I {} git tag "v{}"
+              git push origin --tags
+            else
+              echo "Skip as branch not master"
+            fi
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          context: 
+            - org-global
+            - directory-flex-plugin
+      - deploy:
+          context: 
+            - org-global
+            - directory-flex-plugin
+          requires:
+            - build
+          <<: *filter_untagged_commits_on_master_branch
+  tag:
+    jobs:
+      - tag:
+          context: org-global
+          <<: *filter_untagged_commits_on_master_branch
