@@ -12,6 +12,21 @@ aliases:
     command: |
       echo "@spoke-ph:registry=https://registry.npmjs.org/" \>> ~/.npmrc
       echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" \>> ~/.npmrc
+  - &install_twilio_cli
+    name: Install twilio cli and plugins
+    command: |
+      npm i --prefix=$HOME/.local -g twilio-cli
+      twilio plugins:install @twilio-labs/plugin-serverless
+      twilio plugins:install @twilio-labs/plugin-flex
+  - &generate_env_file
+    name: Generate .env file
+    command: |
+      ENV_PATH=./functions/.env
+      echo "SPOKE_CLIENT_ID=$SPOKE_CLIENT_ID" >> $ENV_PATH
+      echo "SPOKE_CLIENT_SECRET=$SPOKE_CLIENT_SECRET" >> $ENV_PATH
+      echo "SPOKE_AUTH_SERVICE_URL=$SPOKE_AUTH_SERVICE_URL" >> $ENV_PATH
+      echo "SPOKE_API_URL=$SPOKE_API_URL" >> $ENV_PATH
+      echo "ACCOUNT_SID=$TWILIO_ACCOUNT_SID" >> $ENV_PATH
   - &filter_untagged_commits_on_master_branch
     filters:
       branches:
@@ -28,28 +43,31 @@ jobs:
       - run: 
           name: NPM Install
           command: npm ci
-      - run:
-          name: Install twilio cli and plugins
-          command: |
-            npm i --prefix=$HOME/.local -g twilio-cli
-            twilio plugins:install @twilio-labs/plugin-serverless
-            twilio plugins:install @twilio-labs/plugin-flex
+      - run: *install_twilio_cli
       - run:
           name: Build serverless functions
           command: npm run functions:build
       - run:
           name: Build Flex plugin
           command: npm run plugin:build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
   deploy:
     <<: *defaults
     steps:
-      - checkout
-      - run: 
-          name: NPM Install
-          command: npm ci
-      # Add step to echo to .env here
-      # Add step to deploy here
+      - attach_workspace:
+          at: ~/twilio-flex-spoke-directory-plugin
+      - run: *generate_env_file
+      - run: *install_twilio_cli
+      - run:
+          name: Build and deploy functions
+          command: npm run functions:deploy
+      - run:
+          name: Build, deploy and release plugin
+          command: CHANGELOG=`git log --format=%s -1` npm run plugin:deploy && npm run plugin:release
       
   tag:
     <<: *defaults
