@@ -1,6 +1,6 @@
 {
   "name": "twilio-flex-spoke-directory-plugin",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Spoke Directory plugin for Twilio Flex",
   "scripts": {
     "plugin:start": "npm run env:validate plugin && twilio flex:plugins:start -l debug",
@@ -11,7 +11,7 @@
     "functions:build": "npm run env:validate function && rm -rf dist && webpack --config webpack.functions.config.js",
     "functions:deploy": "npm run functions:build && twilio serverless:deploy --override-existing-project --functions-folder=dist --runtime=node12 --log-level=debug --no-assets --env=./functions/.env",
     "start": "concurrently npm:functions:start npm:plugin:start",
-    "changelog:release": "changelog --release=$npm_package_version",
+    "release:changelog": "changelog --release=$npm_package_version",
     "version": "echo $npm_package_version",
     "env:validate": "node ./scripts/validateEnv"
   },

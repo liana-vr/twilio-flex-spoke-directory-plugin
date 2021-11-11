@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.0] - 2021-11-11
+### Changed
+- Update README.md
+- Renamed example `.env` files:
+  - `functions/.env.example` renamed to `functions/.env.functions.example`
+  - `.env.example` renamed to `.env.plugin.example`
+  - NPM script to validate environment variables updated to reflect new file names
+
 ## [0.3.0] - 2021-11-10
 ### Added
 - NPM scripts to validate environment variables for plugin and functions

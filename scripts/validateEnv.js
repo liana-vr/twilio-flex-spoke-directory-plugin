@@ -4,7 +4,9 @@ const dotenv = require("dotenv");
 const PRESET_KEYS = ["SPOKE_AUTH_SERVICE_URL", "SPOKE_API_URL"];
 
 const ENV_FUNCTIONS_FILE_PATH = "../functions/.env";
+const ENV_FUNCTIONS_EXAMPLE_FILE_PATH =   "../functions/.env.functions.example";
 const ENV_PLUGIN_FILE_PATH = "../.env";
+const ENV_PLUGIN_EXAMPLE_FILE_PATH =   "../.env.plugin.example";
 
 const isExampleValue = ({ envKey, envValue, envExampleValue }) => {
   if (PRESET_KEYS.includes(envKey)) {
@@ -24,12 +26,15 @@ const validateEnvVariable = (input) => {
   }
 };
 
+const isFunctionEnvType = (envType) => envType === "function";
+
 const validateEnv = () => {
   const envType = process.argv.slice(2)[0];
-  const pathToEnv = envType === "function" ? ENV_FUNCTIONS_FILE_PATH : ENV_PLUGIN_FILE_PATH;
+  const pathToEnv = isFunctionEnvType(envType) ? ENV_FUNCTIONS_FILE_PATH : ENV_PLUGIN_FILE_PATH;
+  const pathToExample = isFunctionEnvType(envType) ? ENV_FUNCTIONS_EXAMPLE_FILE_PATH : ENV_PLUGIN_EXAMPLE_FILE_PATH;
 
   const envFilePath = path.resolve(__dirname, pathToEnv);
-  const envExampleFilePath = path.resolve(__dirname, `${pathToEnv}.example`);
+  const envExampleFilePath = path.resolve(__dirname, pathToExample);
   const env = dotenv.config({ path: envFilePath }).parsed;
   const envExample = dotenv.config({ path: envExampleFilePath }).parsed;
 
