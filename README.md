@@ -10,24 +10,33 @@ The Spoke Directory plugin adds a `Spoke` tab when clicking on the call forward 
 
 ## Prerequisites
 
-1. Twilio account SID and auth token for your Twilio Flex Project.  This plugin (and the Spoke Account you create in the next step) **must** be deployed into the same project as Twilio Flex.  
+1. Twilio account SID and auth token for your Twilio Flex Project.  This plugin (and the Spoke Account you create in the next step) **must** be deployed into the same project as Twilio Flex.
+
 ![Twilio credentials screenshot](screenshots/TwilioCredentials.png)
+
 2. Spoke Account: Signup for a free developer account at https://account.spokephone.com/twilio. You will need your Twilio account SID and auth token to complete the signup flow
 3. Spoke Developer API credentials - get these from https://account.spokephone.com/developer-api. See [Developer API Authentication](https://developer.spokephone.com/#section/Authentication) for more information
 4. NodeJS 12, NPM 6 installed locally
+5. Twilio Flex configured to use React 16.13.1 from the Twilio Flex Admin Panel - https://flex.twilio.com/admin/developers
 5. Twilio CLI installed locally - https://www.twilio.com/docs/twilio-cli/quickstart
 6. Twilio CLI Serverless plugin installed locally - https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit
 7. Twilio CLI Flex plugin installed locally - https://www.twilio.com/docs/flex/developer/plugins/cli/install
 
 ## Setup
 
-Install Twilio CLI, Twilio's Serverless plugin and Twilio's Flex plugin
+1. Install Twilio CLI, Twilio's Serverless plugin and Twilio's Flex plugin
 
 ```bash
 npm install twilio-cli@latest -g
 twilio plugins:install @twilio-labs/plugin-serverless
 twilio plugins:install @twilio-labs/plugin-flex
 ```
+
+2. Ensure Twilio Flex is configured to use React 16.13.1
+
+Open [Developer Setup on the Twilio Flex Admin Panel](https://flex.twilio.com/admin/developers) and make sure that the React version is set to `Latest (~16.13.1)`
+
+![Twilio Flex Developer Admin Panel screenshot](screenshots/FlexDeveloperSetupReact.png)
 
 ## Deploy
 
@@ -54,8 +63,11 @@ $ twilio profiles:use {YOUR_ACCOUNT}
 
 Twilio's Serverless deploy process will automatically upload any environment variables in your `.env` file to the Twilio service.
 This file must be present in the `functions` directory, and can be copied over from `.env.functions.example`. Update `.env` with the following values using your favourite editor. The values for `YOUR_SPOKE_CLIENT_ID` and `YOUR_SPOKE_CLIENT_SECRET` are provided to you when you create a Developer API key in your Spoke account:  
+
 ![Spoke developer page screenshot](screenshots/SpokeDeveloperPage.png)
-Developer API authentication settings:  
+
+Developer API authentication settings:
+
 ![Spoke credentials screenshot](screenshots/SpokeCredentials.png)
 
 Content of `functions/.env` file:
@@ -75,7 +87,7 @@ AUTH_TOKEN={AUTH TOKEN}
 The Serverless deploy process will create a new Twilio Runtime service in your Twilio account called `twilio-flex-spoke-directory-plugin`.  The functions and environment variables in this project will be deployed into this service.
 
 ```bash
-$ npm run deploy:functions
+$ npm run functions:deploy
 ```
 When deployment has finished, the Twilio Serverless URL for the application will be printed to the console. This URL can be used to access the application and will be required for the plugin deployment. Note it down:
 
@@ -91,8 +103,10 @@ FLEX_APP_FUNCTIONS_BASE_URL=XXX-dev.twil.io
 FLEX_APP_CALLER_ID=+131555XXXX
 ```
 `FLEX_APP_FUNCTIONS_BASE_URL` is the plugin deployment URL that is printed out in step 4.
-`FLEX_APP_CALLER_ID` can be found in your Twilio console. It can be any Phone Number or Verified Caller ID from the same Twilio project that you are deploying into.  
+`FLEX_APP_CALLER_ID` can be found in your Twilio console. It can be any Phone Number or Verified Caller ID from the same Twilio project that you are deploying into.
+
 ![Flex caller ID screenshot](screenshots/FlexCallerId.png)
+
 When adding the value to `.env` file, make sure you add the country code at the front and drop all the spaces, brackets and other formatting symbols. As with all Twilio numbers this number should be in +E.164 general format and look like this: `+1315555XXXX`.
 
 ### 6. Deploy and release Flex plugin
@@ -113,7 +127,7 @@ Note that when a plugin version has been deployed, it will not be available for 
 
 To verify the functions deployment, login to your project in the Twilio console, and go to the Develop --> Functions --> Services page. Click on the `twilio-flex-spoke-directory-plugin` service, then click on `Environment Variables` near the bottom of the page. Make sure that `SPOKE_CLIENT_ID`, `SPOKE_CLIENT_SECRET`, `SPOKE_AUTH_SERVICE_URL`, `SPOKE_API_URL` are correctly set.
 
-To verify Flex plugin deployment, go to https://flex.twilio.com/admin/plugins. You should see `twilio-flex-spoke-directory-plugin` in the list with status set to "Released".
+To verify Flex plugin deployment, go to https://flex.twilio.com/admin/plugins. You should see `twilio-flex-spoke-directory-plugin` in the list with status set to "Enabled".
 
 ### 8. Keeping up to date with the new versions of this plugin
 

@@ -1,6 +1,6 @@
 {
   "name": "twilio-flex-spoke-directory-plugin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Spoke Directory plugin for Twilio Flex",
   "scripts": {
     "plugin:start": "npm run env:validate plugin && twilio flex:plugins:start -l debug",
