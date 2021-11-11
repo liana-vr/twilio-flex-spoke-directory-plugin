@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.0] - 2021-11-10
+### Added
+- NPM scripts to validate environment variables for plugin and functions
+  - Check that environment variables has been set and not example value
+- `dotenv` development dependency
+- Twilio serverless functions
+  - `get-directory`
+  - `cold-transfer`
+
+### Changed
+- Upgrade dependencies
+  - @spoke-ph/directory-flex-functions   0.1.1  →   2.0.1
+  - @spoke-ph/directory-flex-plugin      0.1.1  →   0.3.1
+  - @twilio/flex-ui                     1.28.1  →  1.29.0
+- Generate environment variables when running build or deploy in CircleCI
+
 ## [0.2.0] - 2021-11-02
 ### Added
 - CircleCI steps to deploy function and plugin into development Flex account
@@ -27,4 +43,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `remove-conference-participant`
   - `set-end-conference-on-participant-exit`
 
-[0.2.0]: https://github.com/aryo/twilio-flex-spoke-directory-plugin/compare/v0.1.0...v0.2.0
+[0.3.0]: https://github.com/spoke-ph/twilio-flex-spoke-directory-plugin/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/spoke-ph/twilio-flex-spoke-directory-plugin/compare/v0.1.0...v0.2.0

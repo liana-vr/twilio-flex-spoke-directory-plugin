@@ -18,8 +18,8 @@ aliases:
       npm i --prefix=$HOME/.local -g twilio-cli
       twilio plugins:install @twilio-labs/plugin-serverless
       twilio plugins:install @twilio-labs/plugin-flex
-  - &generate_env_file
-    name: Generate .env file
+  - &generate_function_env_file
+    name: Generate function .env file
     command: |
       ENV_PATH=./functions/.env
       echo "SPOKE_CLIENT_ID=$SPOKE_CLIENT_ID" >> $ENV_PATH
@@ -27,6 +27,13 @@ aliases:
       echo "SPOKE_AUTH_SERVICE_URL=$SPOKE_AUTH_SERVICE_URL" >> $ENV_PATH
       echo "SPOKE_API_URL=$SPOKE_API_URL" >> $ENV_PATH
       echo "ACCOUNT_SID=$TWILIO_ACCOUNT_SID" >> $ENV_PATH
+      echo "AUTH_TOKEN=$TWILIO_AUTH_TOKEN" >> $ENV_PATH
+  - &generate_plugin_env_file
+    name: Generate plugin .env file
+    command: |
+      ENV_PATH=./.env
+      echo "FLEX_APP_FUNCTIONS_BASE_URL=$FLEX_APP_FUNCTIONS_BASE_URL" >> $ENV_PATH
+      echo "FLEX_APP_CALLER_ID=$FLEX_APP_CALLER_ID" >> $ENV_PATH
   - &filter_untagged_commits_on_master_branch
     filters:
       branches:
@@ -40,7 +47,9 @@ jobs:
     steps:
       - checkout
       - run: *npmrc
-      - run: 
+      - run: *generate_function_env_file
+      - run: *generate_plugin_env_file
+      - run:
           name: NPM Install
           command: npm ci
       - run: *install_twilio_cli
@@ -60,7 +69,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/twilio-flex-spoke-directory-plugin
-      - run: *generate_env_file
+      - run: *generate_function_env_file
+      - run: *generate_plugin_env_file
       - run: *install_twilio_cli
       - run:
           name: Build and deploy functions
@@ -68,7 +78,7 @@ jobs:
       - run:
           name: Build, deploy and release plugin
           command: CHANGELOG=`git log --format=%s -1` npm run plugin:deploy && npm run plugin:release
-      
+
   tag:
     <<: *defaults
     steps:
@@ -90,11 +100,11 @@ workflows:
   build_and_deploy:
     jobs:
       - build:
-          context: 
+          context:
             - org-global
             - directory-flex-plugin
       - deploy:
-          context: 
+          context:
             - org-global
             - directory-flex-plugin
           requires:
