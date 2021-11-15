@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.0] - 2021-11-15
+### Changed
+- @spoke-ph/directory-flex-plugin   1.0.0  →   1.1.0
+  - Stop showing availability status for devices and trunk entities
+
+### Fixed
+- Plugin build script potentially failing due to not having UNBUNDLED_REACT environment variable set
+- README
+  - Link to Spoke Developer APIs page
+  - Node minimum version requirement (Twilio CLI Serverless plugin requires Node 12.22.1)
+
 ## [1.1.0] - 2021-11-11
 ### Changed
 - Update README to contain instructions on how to set Twilio Flex React version
@@ -64,6 +75,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `remove-conference-participant`
   - `set-end-conference-on-participant-exit`
 
+[1.2.0]: https://github.com/spoke-ph/twilio-flex-spoke-directory-plugin/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/spoke-ph/twilio-flex-spoke-directory-plugin/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/spoke-ph/twilio-flex-spoke-directory-plugin/compare/v0.4.0...v1.0.0
 [0.4.0]: https://github.com/spoke-ph/twilio-flex-spoke-directory-plugin/compare/v0.3.0...v0.4.0

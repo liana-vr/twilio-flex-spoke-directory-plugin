@@ -1,11 +1,11 @@
 {
   "name": "twilio-flex-spoke-directory-plugin",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Spoke Directory plugin for Twilio Flex",
   "scripts": {
     "plugin:start": "npm run env:validate plugin && twilio flex:plugins:start -l debug",
     "plugin:build": "npm run env:validate plugin && rm -rf build && twilio flex:plugins:build -l=debug",
-    "plugin:deploy": "npm run plugin:build && UNBUNDLED_REACT=true twilio flex:plugins:deploy --changelog=\"$CHANGELOG\" --version=$npm_package_version -l=debug",
+    "plugin:deploy": "UNBUNDLED_REACT=true npm run plugin:build && twilio flex:plugins:deploy --changelog=\"$CHANGELOG\" --version=$npm_package_version -l=debug",
     "plugin:release": "twilio flex:plugins:release --plugin twilio-flex-spoke-directory-plugin@latest",
     "functions:start": "npm run env:validate function && twilio serverless:start --functions-folder=dist --env=./functions/.env",
     "functions:build": "npm run env:validate function && rm -rf dist && webpack --config webpack.functions.config.js",
@@ -34,7 +34,7 @@
   "dependencies": {},
   "devDependencies": {
     "@spoke-ph/directory-flex-functions": "2.1.0",
-    "@spoke-ph/directory-flex-plugin": "1.0.0",
+    "@spoke-ph/directory-flex-plugin": "1.1.0",
     "@twilio/flex-ui": "1.29.0",
     "concurrently": "6.3.0",
     "dotenv": "10.0.0",

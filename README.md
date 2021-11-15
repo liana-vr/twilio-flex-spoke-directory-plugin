@@ -15,8 +15,8 @@ The Spoke Directory plugin adds a `Spoke` tab when clicking on the call forward 
 ![Twilio credentials screenshot](screenshots/TwilioCredentials.png)
 
 2. Spoke Account: Signup for a free developer account at https://account.spokephone.com/twilio. You will need your Twilio account SID and auth token to complete the signup flow
-3. Spoke Developer API credentials - get these from https://account.spokephone.com/developer-api. See [Developer API Authentication](https://developer.spokephone.com/#section/Authentication) for more information
-4. NodeJS 12, NPM 6 installed locally
+3. Spoke Developer API credentials - get these from https://account.spokephone.com/developers/apis. See [Developer API Authentication](https://developer.spokephone.com/#section/Authentication) for more information
+4. NodeJS 12.22.1+ and NPM 6 installed locally
 5. Twilio Flex configured to use React 16.13.1 from the Twilio Flex Admin Panel - https://flex.twilio.com/admin/developers
 5. Twilio CLI installed locally - https://www.twilio.com/docs/twilio-cli/quickstart
 6. Twilio CLI Serverless plugin installed locally - https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit
